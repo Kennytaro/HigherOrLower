@@ -1,0 +1,99 @@
+import java.util.Scanner;
+import java.util.Random;
+import java.io.*;
+
+class Main{
+  static final int  MIN = 0;
+  static final int   MAX = 100;
+  
+  public static void main(String[] args) { 
+    Scanner scanner = new Scanner(System.in);
+    game(scanner, rng(), MIN, MAX);
+    
+  }
+
+  
+  public static void game(Scanner scanner, int rng, int MIN, int MAX) {
+    int currentNumber = rng();
+    System.out.println("The first number is " + currentNumber);
+    checkInput(rng(), scanner, MIN , MAX);
+  }
+
+  public static int rng() { 
+    Random rand = new Random();
+    int initialValue = rand.nextInt(100) + 1; 
+    return initialValue;
+      }
+
+   public static String askInput(Scanner scanner) {
+    System.out.println("Enter your guess (higher/lower): ");
+    String guess = "";
+    boolean higherLower = true;
+    while (higherLower) {
+      guess = scanner.next(); 
+      if(guess.equalsIgnoreCase("higher") || guess.equalsIgnoreCase("lower")) {
+        higherLower = false;
+      } else {
+        System.out.println("Try again, please enter \"higher\" or \"lower\". " );
+      }
+    }
+    return guess;
+     
+  }
+  public static int askNumberInput(Scanner scanner, int MIN, int MAX){    
+System.out.println("Enter a number between " + MIN + " and " + MAX + ":");
+    int input = -1; 
+    boolean isInRange = true;
+
+    while (isInRange) {
+        if (scanner.hasNextInt()) {
+            input = scanner.nextInt();
+            if (input >= MIN && input <= MAX) {
+                isInRange = false;
+            } else {
+                System.out.println("Invalid input. Please enter a number between " + MIN + " and " + MAX + ".");
+            }
+        } else {
+            System.out.println("Invalid input. Please enter a number between " + MIN + " and " + MAX + ".");
+            scanner.nextLine(); 
+        }
+    }
+
+    return input;
+  }
+
+  
+  public static void checkInput(int rng, Scanner scanner, int MIN, int MAX) { 
+    int currentNumber = rng();
+    int points = 0; // points start at 0
+    int numberCap = 10;
+    boolean correctGuess = true; //assuemes first guess is true   
+    
+    while (correctGuess){
+      String guess = askInput(scanner);
+      int guess2 = askNumberInput(scanner,  MIN,  MAX);
+      
+      
+      int nextNumber = rng(); //nextNumber is random calls from rng
+      if (guess.equals("higher") && nextNumber > currentNumber || guess.equals("lower") && nextNumber < currentNumber){ 
+        System.out.println("Correct! is was " + guess); // yay ur right!
+                currentNumber = nextNumber;  // turns currentNumber to nextNumber
+                points++;// adds points
+        }else {
+                System.out.println("Incorrect!");
+              
+      }
+        if (guess2 < nextNumber - numberCap || guess2 > nextNumber + numberCap) { 
+          System.out.println("Incorrect!");          
+             }else {
+                System.out.println("Your number guess is correct!");
+                currentNumber = nextNumber;
+                points++;
+                
+      }
+      System.out.println("The next number is " + nextNumber + ".");
+    System.out.println("Your score is: " + points);
+    }
+    
+  }
+}
